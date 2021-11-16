@@ -26,6 +26,25 @@ ion-menu-button {
 #container a {
   text-decoration: none;
 }
-img{
+
+img {
   transition: transform ease 0.1ms;
+}
+
+ion-card {
+  opacity: 0;
+  @for $i from 1 through 200 {
+    &:nth-child(#{$i}) {
+      animation: ease opacity 1s #{$i}s forwards;
+    }
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
