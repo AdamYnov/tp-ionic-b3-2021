@@ -1,12 +1,11 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Camera, CameraResultType} from '@capacitor/camera';
 import {LoadingController} from '@ionic/angular';
-import {map} from 'rxjs/operators';
 import {Todo, User} from '../models';
 import {TodosService} from '../services/todos.service';
 import {UsersService} from '../services/users.service';
+
 
 @Component({
   selector: 'app-folder',
@@ -18,11 +17,14 @@ export class FolderPage implements OnInit {
   imgSrc = [];
 
   users: User[];
+  z: number;
+  x: number;
+  y: number;
 
   constructor(private activatedRoute: ActivatedRoute,
               private loadingController: LoadingController,
               private usersSerice: UsersService,
-              private todosService: TodosService) {
+              private todosService: TodosService,) {
   }
 
   async ngOnInit() {
@@ -49,8 +51,31 @@ export class FolderPage implements OnInit {
               user.todos = values[index];
             });
             loading.dismiss();
-        });
+          });
       });
+
+    try {
+      if (DeviceMotionEvent.requestPermission) {
+        await DeviceMotionEvent.requestPermission();
+      }
+    } catch (e) {
+      // Handle error
+      console.error(e);
+      return;
+    }
+
+    // Once the user approves, can start listening:
+    /*Motion.addListener('orientation', (event: DeviceOrientationEvent) => {
+      if (event.type === 'deviceorientation') {
+        const {gamma, beta, alpha} = event;
+        this.z = alpha ?? 0;
+        this.x = beta ?? 0;
+        this.y = gamma ?? 0;
+        this.cdf.detectChanges();
+        console.log(`Device motion event: `, this.x, this.y, this.z);
+      }
+    });*/
+
   }
 
   async openCamera() {
