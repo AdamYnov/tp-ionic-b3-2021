@@ -1,4 +1,5 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {animate, query, stagger, style, transition, trigger} from '@angular/animations';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Camera, CameraResultType} from '@capacitor/camera';
 import {LoadingController} from '@ionic/angular';
@@ -11,6 +12,32 @@ import {UsersService} from '../services/users.service';
   selector: 'app-folder',
   templateUrl: './folder.page.html',
   styleUrls: ['./folder.page.scss'],
+  animations: [trigger('todoAnim', [
+    transition('* <=> *', [
+      query('ion-item:enter',
+        [
+          style({opacity: 0, transform: 'translateY(-15px)'}),
+          stagger(
+            '100ms',
+            animate(
+              '500ms ease-out',
+              style({opacity: 1, transform: 'translateY(0px)'})
+            )
+          )
+        ],
+        {optional: true}
+      ),
+      query('ion-item:leave',
+        [
+          animate(
+            '500ms ease-out',
+            style({opacity: 0, transform: 'translateY(-15px)'}),
+          )
+        ],
+        {optional: true}
+      )
+    ])
+  ])]
 })
 export class FolderPage implements OnInit {
   public folder: string;
@@ -50,6 +77,10 @@ export class FolderPage implements OnInit {
             this.users.forEach((user, index) => {
               user.todos = values[index];
             });
+
+            setTimeout(() => {
+              this.users[0].todos.pop();
+            }, 5000)
             loading.dismiss();
           });
       });

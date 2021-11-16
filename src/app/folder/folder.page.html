@@ -27,7 +27,7 @@
       </ion-card-header>
       <ion-card-content>
 
-        <ion-list *ngIf="user.todos">
+        <ion-list *ngIf="user.todos" [@todoAnim]="user?.todos.length">
           <ion-item *ngFor="let todo of user.todos">
             <ion-checkbox slot="start" [checked]="todo.completed"></ion-checkbox>
             <ion-label>{{todo.title}}</ion-label>
