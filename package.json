@@ -9,10 +9,13 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "emulate:android:livereload": "ionic cap run android --livereload --external --target='Pixel_3_XL_API_28'",
+    "emulate:android": "ionic cap run android --target='Pixel_3_XL_API_28'"
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "~12.1.1",
     "@angular/common": "~12.1.1",
     "@angular/core": "~12.1.1",
     "@angular/forms": "~12.1.1",
@@ -26,6 +29,7 @@
     "@capacitor/haptics": "1.1.0",
     "@capacitor/ios": "3.2.4",
     "@capacitor/keyboard": "1.1.0",
+    "@capacitor/motion": "^1.0.2",
     "@capacitor/status-bar": "1.0.3",
     "@ionic-native/camera": "^5.36.0",
     "@ionic/angular": "^5.5.2",

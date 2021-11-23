@@ -14,15 +14,20 @@
     </ion-toolbar>
   </ion-header>
 
+  <img [src]="imgSrc[0] ? imgSrc[0] : 'https://via.placeholder.com/150'"
+       (click)="openCamera()"
+>
   <div>
     <ion-card *ngFor="let user of users">
       <ion-card-header>
-        <ion-card-title>{{user.name}}</ion-card-title>
-        <ion-card-subtitle *ngIf="user.todos">{{user.todos.length}} tâche{{user.todos.length > 1 ? 's' : ''}} - {{statusTodoCheck(user.todos).unChecked}} à faire</ion-card-subtitle>
+        <ion-card-title>{{user.id}} - {{user.name}}</ion-card-title>
+        <ion-card-subtitle *ngIf="user.todos">{{user.todos.length}} tâche{{user.todos.length > 1 ? 's' : ''}}
+          - {{statusTodoCheck(user.todos).unChecked}} à faire
+        </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
 
-        <ion-list *ngIf="user.todos">
+        <ion-list *ngIf="user.todos" [@todoAnim]="user?.todos.length">
           <ion-item *ngFor="let todo of user.todos">
             <ion-checkbox slot="start" [checked]="todo.completed"></ion-checkbox>
             <ion-label>{{todo.title}}</ion-label>

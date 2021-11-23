@@ -1,28 +1,57 @@
-import {HttpClient} from '@angular/common/http';
+import {animate, query, stagger, style, transition, trigger} from '@angular/animations';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Camera, CameraResultType} from '@capacitor/camera';
 import {LoadingController} from '@ionic/angular';
-import {map} from 'rxjs/operators';
 import {Todo, User} from '../models';
 import {TodosService} from '../services/todos.service';
 import {UsersService} from '../services/users.service';
+
 
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.page.html',
   styleUrls: ['./folder.page.scss'],
+  animations: [trigger('todoAnim', [
+    transition('* <=> *', [
+      query('ion-item:enter',
+        [
+          style({opacity: 0, transform: 'translateY(-15px)'}),
+          stagger(
+            '100ms',
+            animate(
+              '500ms ease-out',
+              style({opacity: 1, transform: 'translateY(0px)'})
+            )
+          )
+        ],
+        {optional: true}
+      ),
+      query('ion-item:leave',
+        [
+          animate(
+            '500ms ease-out',
+            style({opacity: 0, transform: 'translateY(-15px)'}),
+          )
+        ],
+        {optional: true}
+      )
+    ])
+  ])]
 })
 export class FolderPage implements OnInit {
   public folder: string;
   imgSrc = [];
 
   users: User[];
+  z: number;
+  x: number;
+  y: number;
 
   constructor(private activatedRoute: ActivatedRoute,
               private loadingController: LoadingController,
               private usersSerice: UsersService,
-              private todosService: TodosService) {
+              private todosService: TodosService,) {
   }
 
   async ngOnInit() {
@@ -48,9 +77,36 @@ export class FolderPage implements OnInit {
             this.users.forEach((user, index) => {
               user.todos = values[index];
             });
+
+            setTimeout(() => {
+              this.users[0].todos.pop();
+            }, 5000)
             loading.dismiss();
-        });
+          });
       });
+
+    try {
+      if (DeviceMotionEvent.requestPermission) {
+        await DeviceMotionEvent.requestPermission();
+      }
+    } catch (e) {
+      // Handle error
+      console.error(e);
+      return;
+    }
+
+    // Once the user approves, can start listening:
+    /*Motion.addListener('orientation', (event: DeviceOrientationEvent) => {
+      if (event.type === 'deviceorientation') {
+        const {gamma, beta, alpha} = event;
+        this.z = alpha ?? 0;
+        this.x = beta ?? 0;
+        this.y = gamma ?? 0;
+        this.cdf.detectChanges();
+        console.log(`Device motion event: `, this.x, this.y, this.z);
+      }
+    });*/
+
   }
 
   async openCamera() {
